@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %} 
+
+{% block body %}
+
+<h2> liste des users par email </h2>
+
+{% for users in user %}
+<p> {{ users.email }} </p>
+
+{% endfor %}
+
+<h2> les données de l'utilisateur dont l'id est 1</h2>
+ 
+<p>{{ user1.email }} </br> {{ user1.roles[0] }} <br> {{ user1.enabled }}</p>
+
+<h2> - les données de l'utilisateur dont l'email est foo.foo@example.com </h2>
+
+{% for user in fooFoo %}
+
+<p>  {{user.id}} </p>
+<p>{{user.enabled}} </p>
+<p>{{user.roles[0]}}<p/>
+{% endfor %}
+
+<h2> - la liste des utilisateurs dont l'attribut roles contient le mot clé ROLE_USER, triée par ordre alphabétique d'email </h2>
+
+  {% for user in roles%}
+
+<p>  {{user.email}} </p>
+
+  {% endfor %}
+
+{% endblock %}
