@@ -43,7 +43,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */
-        public function findAllUsersOrderByMail(): array
+        public function allUsersOrderByMail(): array
         {
             return $this->createQueryBuilder('u')
                 ->andWhere('u.email IS NOT null')
@@ -67,6 +67,20 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $this->createQueryBuilder('u')
             ->andWhere('u.roles LIKE :roles')
             ->setParameter('roles', '%ROLE_USER%')
+            ->orderBy('u.email', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+     /**
+     * Cette méthode cherche les utilisateurs inactifs dont l'attribut enabled est égal à false
+     * @return User[] Returns an array of User objects
+     */
+    public function falseEnabled(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.enabled = :false')
+            ->setParameter('false', false)
             ->orderBy('u.email', 'ASC')
             ->getQuery()
             ->getResult();
