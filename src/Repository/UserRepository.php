@@ -40,20 +40,25 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
-//    /**
-//     * @return User[] Returns an array of User objects
-//     */
-        public function allUsersOrderByMail(): array
-        {
-            return $this->createQueryBuilder('u')
-                ->andWhere('u.email IS NOT null')
-                ->orderBy('u.email', 'ASC')
-                ->getQuery()
-                ->getResult() 
-            ;
-        }
-        
-        public function emailFooFOo(string $email): array
+    /**
+     * This method find all user ordered by email
+     * @return User[] Returns an array of User objects
+     */
+    public function findAllUsersOrderByMail(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->select('u')
+            ->orderBy('u.email', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * This method find a user with a specific email
+     * @param string $email The email to search for
+     * @return User[] Returns an array of User objects
+     */
+    public function findByEmail(string $email): array
     {
         return $this->createQueryBuilder('u')
             ->setParameter('email', "%$email%")
@@ -62,7 +67,11 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getResult();
     }
 
-    public function roles(): array
+    /**
+     * This method find all users whose role is ROLE_USER ordered by email
+     * @return User[] Returns an array of User objects
+     */
+    public function allRoleUser(): array
     {
         return $this->createQueryBuilder('u')
             ->andWhere('u.roles LIKE :roles')
@@ -73,7 +82,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
      /**
-     * Cette méthode cherche les utilisateurs inactifs dont l'attribut enabled est égal à false
+     * This method find all non active users
      * @return User[] Returns an array of User objects
      */
     public function falseEnabled(): array
@@ -85,14 +94,4 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getQuery()
             ->getResult();
     }
-
-//    public function findOneBySomeField($value): ?User
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }

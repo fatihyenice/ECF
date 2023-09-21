@@ -3,9 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Emprunteur;
-use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use DateTime;
+
 
 /**
  * @extends ServiceEntityRepository<Emprunteur>
@@ -23,10 +24,10 @@ class EmprunteurRepository extends ServiceEntityRepository
     }
 
     /**
-     * Cette méthode cherche tous les emprunteurs triés par nom et prénom
+     * This Method return all emprunteur ordered by lastname and firstname
      * @return Emprunteur[] Returns an array of Emprunteur objects
      */
-    public function findEmprunteur(): array
+    public function findAllEmprunteurOrderByNameAndFirstName(): array
     {
         return $this->createQueryBuilder('e')
             ->select('e')
@@ -36,12 +37,11 @@ class EmprunteurRepository extends ServiceEntityRepository
     }
 
     /**
-     * Cette méthode cherche les emprunteurs ou le prénom est égal à foo triés par ordre alphabétique de nom
-     * et prénom
-     * @param $keyword pour chercher le mot en question
+     * This method finds all Emprunteur containing a keyword anywhere in the name or firstname
+     * @param string $keyword The keyword to search for
      * @return Emprunteur[] Returns an array of Emprunteur objects
      */
-    public function findFoo(string $keyword): array
+    public function findEmprunteurByKeyword(string $keyword): array
     {
         return $this->createQueryBuilder('e')
             ->andWhere('e.nom LIKE :keyword')
@@ -53,35 +53,32 @@ class EmprunteurRepository extends ServiceEntityRepository
     }
 
     /**
-     * Cette méthode cherche les emprunteyrs dont le tel est 1234 triés par nom et prénom
-     * @param $keyword pour chercher le mot en question
+     * This method finds all Emprunteur containing a keyword anywhere in the tel number
+     * @param string $keyword The keyword to search for
      * @return Emprunteur[] Returns an array of Emprunteur objects
      */
-    public function findTel(string $keyword): array
+    public function findEmprunteurByKeywordInTel(string $keyword): array
     {
         return $this->createQueryBuilder('e')
             ->andWhere('e.tel LIKE :keyword')
             ->setParameter('keyword', "%$keyword%")
             ->orderBy('e.nom, e.prenom', 'ASC')
-
             ->getQuery()
             ->getResult();
     }
 
     /**
-     * Cette méthode cherche les emprunteurs dont la date est antérieur au 01/03/2021
-     * @param $keyword pour chercher le mot en question
+     * This method finds all Emprunteur created before a specific date
+     * @param DateTime $date The date to search for
      * @return Emprunteur[] Returns an array of Emprunteur objects
      */
     public function findEmprunteurByDateCreatedAt(DateTime $date): array
     {
-
-
         return $this->createQueryBuilder('e')
             ->select('e')
             ->Where('e.createdAt < :date')
             ->setParameter('date', $date)
-            ->orderBy('e.prenom, e.nom', 'ASC')
+            ->orderBy('e.nom, e.prenom', 'ASC')
             ->getQuery()
             ->getResult();
     }

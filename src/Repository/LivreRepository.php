@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Entity\Auteur;
 use App\Entity\Livre;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -22,27 +21,50 @@ class LivreRepository extends ServiceEntityRepository
         parent::__construct($registry, Livre::class);
     }
 
+    //    /**
+    //     * @return Livre[] Returns an array of Livre objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('l')
+    //            ->andWhere('l.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('l.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
+
+    //    public function findOneBySomeField($value): ?Livre
+    //    {
+    //        return $this->createQueryBuilder('l')
+    //            ->andWhere('l.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
+
     /**
-     * Cette méthode retourne la liste compléte de tous les livres triés par ordre alphabétique de titre
-     * @return Livre[] Returns an array of Livre objects
+     * This method find all books ordered by book's title
+     * @return livre[] Returns an array of Livre objects
      */
-    public function findAllLivre(): array
+    public function findAllLivreOrderByName(): array
     {
         return $this->createQueryBuilder('l')
-            ->andWhere('l.titre IS NOT null')
+            ->select('l')
             ->orderBy('l.titre', 'ASC')
             ->getQuery()
             ->getResult();
     }
 
-
     /**
-     * Cette méthode retourne la liste des livres contenants le titre voule entré dans la variable $keyword trié par ordre
-     * alphabétique des livres
-     * @param  $keyword pour chercher le mot en question
+     * This method finds all books containing a keyword anywhere in the book's title, ordered by title
+     * @param string $keyword The keyword to search for
      * @return Livre[] Returns an array of Livre objects
      */
-    public function findTitreLorem(string $keyword): array
+    public function findBookByKeyword(string $keyword): array
     {
         return $this->createQueryBuilder('l')
             ->andWhere('l.titre LIKE :keyword')
@@ -52,10 +74,29 @@ class LivreRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+
+    // public function findBooksByGenre(Genre $genres): array
+    // {
+    //     return $this->createQueryBuilder('l')
+    //         ->innerJoin('l.genres', 'genres')
+    //         ->andWhere('genres = :genres')
+    //         ->setParameter('genres', $genres)
+    //         ->orderBy('l.titre', 'ASC')
+    //         ->getQuery()
+    //         ->getResult();
+    // }
+
+    // pour tester la requete du dessous
+    // SELECT titre
+    // FROM livre_genre
+    // INNER JOIN livre ON livre_genre.livre_id = livre.id
+    // INNER JOIN genre ON livre_genre.genre_id = genre.id
+    // WHERE genre.nom LIKE '%roman%'  
+    // ORDER BY `livre`.`titre` ASC
+
     /**
-     * Cette méthode retourne la liste des livres contenant le mot clé entré dans la variable $genre triés
-     * par ordre alphabétique de titre
-     * @param  $keyword pour chercher le mot en question
+     * This method finds all books containing a keyword anywhere in the book genres ordered by title
+     * @param string $genres The keyword to search for
      * @return Livre[] Returns an array of Livre objects
      */
     public function findBooksByGenre(string $genres): array

@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Emprunt;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -23,11 +22,11 @@ class EmpruntRepository extends ServiceEntityRepository
     }
 
     /**
-     * Cette méthode affiche la liste des 10 derniers emprunts triés par ordre décroissant de date d'emprunt
-     * @param $value la valeur à entrer
+     * this method returns the last X emprunt
+     * @param Value $value The number of emprunts to search for
      * @return Emprunt[] Returns an array of Emprunt objects
      */
-    public function listeDerniersEmprunts($value): array
+    public function findLastEmprunt($value): array
     {
         return $this->createQueryBuilder('e')
             ->orderBy('e.dateEmprunt', 'DESC')
@@ -37,72 +36,73 @@ class EmpruntRepository extends ServiceEntityRepository
     }
 
     /**
-     * Cette méthode affiche les emprunts d'un emprunteur triés par ordre croissant de date d'emprunt
-     * @param $value2 la valeur à entrer
+     * this method returns all emprunts done by a specific emprunteurID
+     * @param Value $value The value of emprunteurId to search for
      * @return Emprunt[] Returns an array of Emprunt objects
      */
-    public function findEmprunt2($value2): array
+    public function findEmpruntByEmprunteurId($value): array
     {
         return $this->createQueryBuilder('e')
             ->select('e')
             ->where('e.emprunteur = :value')
-            ->setParameter('value', $value2)
+            ->setParameter('value', $value)
             ->orderBy('e.dateEmprunt', 'ASC')
             ->getQuery()
             ->getResult();
     }
 
     /**
-     * Cette méthode affiche les emprunts d'un emprunteur triés par ordre decroissant de date d'emprunt
-     * @param $value3 la valeur à entrer
+     * this method return all emprunt for a specific livreID
+     * @param Value $value The value of LivreId to search for
      * @return Emprunt[] Returns an array of Emprunt objects
      */
-    public function findEmprunt3($value3): array
+    public function findEmpruntByLivreId($value): array
     {
         return $this->createQueryBuilder('e')
             ->select('e')
             ->where('e.livre = :value')
-            ->setParameter('value', $value3)
+            ->setParameter('value', $value)
             ->orderBy('e.dateEmprunt', 'DESC')
             ->getQuery()
             ->getResult();
     }
 
-    /** 
-     * Cette méthode cherche la liste des 10 derniers emprunts triés par ordre décroissant de date de retour
-     * @param $value1 la valeur à entrer
+    /**
+     * this method returns the last X emprunt with a return Date
+     * @param Value $value The number of emprunts to search for
      * @return Emprunt[] Returns an array of Emprunt objects
      */
-    public function listeDerniersEmpruntsRetour($value1): array
-    {
-        return $this->createQueryBuilder('e')
-            ->where('e.dateRetour IS NOT NULL')
-            ->orderBy('e.dateRetour', 'DESC')
-            ->setMaxResults($value1)
-            ->getQuery()
-            ->getResult();
-    }
-
-    /** 
-     * Cette méthode cherche la liste des emprunts qui n'ont pas encore été retournés triés par ordre croissant de date d'emprunt
-     * @return Emprunt[] Returns an array of Emprunt objects
-     */
-    public function findSpecificIsNulll(): array
+    public function findLastEmpruntRetour($value): array
     {
         return $this->createQueryBuilder('e')
             ->select('e')
-            ->where('e.dateRetour IS NULL')
-            ->orderBy('e.dateRetour', 'ASC')
+            ->where('e.dateRetour IS NOT null')
+            ->orderBy('e.dateRetour', 'DESC')
+            ->setMaxResults($value)
             ->getQuery()
             ->getResult();
     }
 
-    /** 
-     * Cette méthode cherche les données d'un emprunt relié à un livre
-     * @param $value la valeur à entrer
+    /**
+     * This method finds all Emprunt with no return date
+     * @return Emprunteur[] Returns an array of Emprunt objects
+     */
+    public function findAllNonReturnEmprunt(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->select('e')
+            ->Where('e.dateRetour IS null')
+            ->orderBy('e.dateEmprunt', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * this method returns an emprunt search by a book ID
+     * @param Value $value The value of LivreId to search for
      * @return Emprunt[] Returns an array of Emprunt objects
      */
-    public function dateEmpruntLivre3($value): array
+    public function findEmpruntDataByLivreId($value): array
     {
         return $this->createQueryBuilder('e')
             ->select('e')

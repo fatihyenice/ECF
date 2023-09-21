@@ -1,57 +1,42 @@
- {% extends 'base.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block title %}Hello TestController!{% endblock %}
+{% block title %} {{ title }} {% endblock %}
 
 {% block body %}
- <h1>{{ title1 }}</h1>
 
- <h2> User </h2>
+<h2> liste des users par email, trié par email alphabetique </h2>
 
-<h2> - la liste complète de tous les utilisateurs (de la table `user`), triée par ordre alphabétique d'email</h2>
-  {% for user in users %}
-  <p> {{user.email}} <p>
+{% for user in users %}
+<p> id : {{ user.id }}, {{ user.email }} </p>
 
-  {% endfor %}
+{% endfor %}
 
-<h2> les données de l'utilisateur dont l'id est `1`</h2>
+<h2> données de l'utilisateur id=1 </h2>
 
-<p> {{ user1.email }} </p>
-<p> {{ user1.enabled }} </p>
-<p> {{ user1.roles[0] }} </p>
+<p> email :  {{ user1.email }} </p>
+<p> enabled : {{ user1.enabled }} </p>
+<p> role : {{ user1.roles[0] }} </p>
 
+<h2> données de l'utilisateur qui a le mail foo.foo@example.com</h2>
 
-<h2> - les données de l'utilisateur dont l'email est `foo.foo@example.com` </h2>
+{% for user in userFooFoo %}
 
-{% for user in fooFoo %}
-
-<p>  {{user.id}} </p>
-<p>{{user.enabled}} </p>
-<p>{{user.roles[0]}}<p/>
+<p> id : {{user.id}} </p>
+<p> enabled : {{user.enabled}} </p>
+<p> role : {{user.roles[0]}} <p/>
  
-  {% endfor %}
+{% endfor %}
 
-  <h2> - la liste des utilisateurs dont l'attribut `roles` contient le mot clé `ROLE_USER`, triée par ordre alphabétique d'email </h2>
+<h2> liste des users qui ont le ROLE_USER, trié par email alphabetique</h2>
+{% for user in roleUser %}
+<p> id : {{ user.id }}, {{ user.email }} </p>
 
-  {% for user in roles%}
+{% endfor %}
 
-<p>  {{user.email}} </p>
+<h2> liste des users inactifs </h2>
+{% for user in userInactifs %}
+<p> id : {{ user.id }}, {{ user.email }} </p>
 
-  {% endfor %}
+{% endfor %}
 
-<h2> - la liste des utilisateurs inactifs (c-à-d dont l'attribut `enabled` est égal à `false`), triée par ordre alphabétique d'email </h2>
-
-{# {% for user in userFalse %}
-
-<p> {{user.email}} </p>
-
-{% endfor %} #}
-
-
-<h2> Livre </h2>
-
-  <h2> - la liste complète de tous les livres, triée par ordre alphabétique de titre </h2>
-
-
-
- 
-{% endblock %} 
+{% endblock %}
