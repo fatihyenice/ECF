@@ -30,7 +30,7 @@ Créez un fochier `.env` à la racine du projet :
 APP_ENV=dev
 App_DEBUG=true
 APP_SECRET=98aeb0581fe939d58566d1eff95851ee
-DATABASE_URL="postgresql://app:!ChangeMe!@127.0.0.1:5432/app?serverVersion=15&charset=utf8"
+DATABASE_URL="mysql://symfony:15051505@127.0.0.1:3306/symfony?serverVersion=mariadb-10.6.12&charset=utf8mb4"
 ```
 
 Pensez à changer la variable `APP_SECRET` et les codes d'accès dans la variable `DATABASE_URL`.
